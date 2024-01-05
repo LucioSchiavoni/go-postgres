@@ -3,5 +3,5 @@ package routes
 import "net/http"
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Iniciando desde routes"))
+	w.Write([]byte("Get al routes"))
 }

@@ -20,7 +20,7 @@ func init() {
 
 }
 
-func DBConnection() *gorm.DB {
+func DBConnection() {
 	var DNS = fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s",
 		os.Getenv("DB_HOST"),
 		os.Getenv("DB_USER"),
@@ -28,13 +28,13 @@ func DBConnection() *gorm.DB {
 		os.Getenv("DB_NAME"),
 		os.Getenv("DB_PORT"),
 	)
-	fmt.Sprintlf("Valor %s", DNS)
-	DB, err := gorm.Open(postgres.Open(DNS), &gorm.Config{})
-	if err != nil {
-		log.Fatal(err)
+	var error error
+	DB, error = gorm.Open(postgres.Open(DNS), &gorm.Config{})
+	if error != nil {
+		log.Fatal(error)
 	} else {
 		log.Println("DB connected")
 
 	}
-	return DB
+
 }
