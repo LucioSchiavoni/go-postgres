@@ -1,19 +1,13 @@
 package routes
 
-import "net/http"
+import (
+	"github.com/LucioSchiavoni/go-postgres/controllers"
+	"github.com/gorilla/mux"
+)
 
-func GetUsersHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Get all users"))
-}
-
-func GetUserByIdHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Get user by id"))
-}
-
-func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Create user"))
-}
-
-func DeleteUserHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Delete user"))
+func UserRoutes(router *mux.Router) {
+	router.HandleFunc("/user", controllers.CreateUser).Methods("POST")
+	router.HandleFunc("/user/{id}", controllers.GetUserById).Methods("GET")
+	router.HandleFunc("/users", controllers.GetUsersHandler).Methods("GET")
+	router.HandleFunc("/user", controllers.DeleteUserHandler).Methods("DELETE")
 }

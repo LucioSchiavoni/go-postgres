@@ -15,21 +15,19 @@ func main() {
 
 	db.DBConnection()
 
-	db.DB.AutoMigrate(models.User{})
-	db.DB.AutoMigrate(models.Post{})
+	if isDevelopment() {
+		db.DB.AutoMigrate(models.User{})
+		db.DB.AutoMigrate(models.Post{})
+	}
+
 	r := mux.NewRouter()
 
-	r.HandleFunc("/", routes.HomeHandler)
-
-	r.HandleFunc("/users", routes.GetUsersHandler).Methods("GET")
-	r.HandleFunc("/users/{id}", routes.GetUserByIdHandler).Methods("GET")
-	r.HandleFunc("/createUsers", routes.CreateUserHandler).Methods("POST")
-	r.HandleFunc("/deleteUser", routes.DeleteUserHandler).Methods("DELETE")
-
-	r.HandleFunc("/posts", routes.GetPostsHandler).Methods("GET")
-	r.HandleFunc("/posts/{id}", routes.GetPostByIdHandler).Methods("GET")
-	r.HandleFunc("/createPost", routes.CreatePostHandler).Methods("POST")
-	r.HandleFunc("/deletePost", routes.DeletePostHandler).Methods("DELETE")
+	routes.UserRoutes(r)
+	routes.PostRoutes(r)
 
 	http.ListenAndServe(":3000", r)
+}
+
+func isDevelopment() bool {
+	return false
 }

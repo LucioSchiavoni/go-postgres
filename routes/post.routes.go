@@ -1,19 +1,13 @@
 package routes
 
-import "net/http"
+import (
+	"github.com/LucioSchiavoni/go-postgres/controllers"
+	"github.com/gorilla/mux"
+)
 
-func GetPostsHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Get all post"))
-}
-
-func GetPostByIdHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Get post by id"))
-}
-
-func CreatePostHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Create post"))
-}
-
-func DeletePostHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Delete post"))
+func PostRoutes(router *mux.Router) {
+	router.HandleFunc("/post", controllers.CreatePost).Methods("POST")
+	router.HandleFunc("/post/{id}", controllers.GetPostById).Methods("GET")
+	router.HandleFunc("/posts", controllers.GetPosts).Methods("GET")
+	router.HandleFunc("/post", controllers.DeletePost).Methods("DELETE")
 }
