@@ -49,6 +49,22 @@ func GetPostById(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(&post)
 }
 
+func GetPostByDescription(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "json/application")
+	params := mux.Vars(r)
+	userID := params["user_id"]
+	description := params["description"]
+	var post models.Post
+	db.DB.First(&post, "user_id= ? AND description= ?", userID, description)
+	if post.ID == 0 {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte("Post not found"))
+		return
+	}
+
+	json.NewEncoder(w).Encode(&post)
+}
+
 func DeletePost(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	var post models.Post
