@@ -7,12 +7,32 @@ import (
 	"github.com/LucioSchiavoni/go-postgres/db"
 	"github.com/LucioSchiavoni/go-postgres/models"
 	"github.com/gorilla/mux"
+	"golang.org/x/crypto/bcrypt"
 )
+
+func HashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	return string(bytes), err
+}
+
+func CheckPasswordHash(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(hash))
+	return err == nil
+}
 
 func CreateUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var user models.User
 	json.NewDecoder(r.Body).Decode(&user)
+
+	secret := "secret"
+	hash, _ := HashPassword(secret)
+	match := CheckPasswordHash(secret, hash)
+	if !match {
+		w.Write([]byte("Error en el hash de la contraseña"))
+	}
+	user.Password = string(hash)
+
 	createUser := db.DB.Create(&user)
 	err := createUser.Error
 
@@ -21,6 +41,9 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(err.Error()))
 
 	}
+
+	user.Password = ""
+
 	json.NewEncoder(w).Encode(&user)
 }
 
