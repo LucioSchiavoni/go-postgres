@@ -2,7 +2,9 @@ package controllers
 
 import (
 	"encoding/json"
+
 	"net/http"
+	"os"
 
 	"github.com/LucioSchiavoni/go-postgres/db"
 	"github.com/LucioSchiavoni/go-postgres/models"
@@ -16,7 +18,7 @@ func HashPassword(password string) (string, error) {
 }
 
 func CheckPasswordHash(password, hash string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(hash))
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
 }
 
@@ -25,11 +27,14 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	var user models.User
 	json.NewDecoder(r.Body).Decode(&user)
 
-	secret := "secret"
+	secret := os.Getenv("HASH_PWD")
+
 	hash, _ := HashPassword(secret)
 	match := CheckPasswordHash(secret, hash)
 	if !match {
+		w.WriteHeader(http.StatusUnauthorized)
 		w.Write([]byte("Error en el hash de la contraseña"))
+		return
 	}
 	user.Password = string(hash)
 

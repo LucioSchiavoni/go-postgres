@@ -14,11 +14,21 @@ endpoints:
 
 GET :
 "/users"  - todos los usuarios
+
 "/user/{id}"  - usuario por id
 
 POST:
 "/user" - crear usuario 
+raw:
+{
+    "username": "",
+    "email": "",
+    "password":""
+}
 
 DELETE:
 "/user" - eliminar usuario 
-
+raw:
+{
+    "ID": 1
+}
