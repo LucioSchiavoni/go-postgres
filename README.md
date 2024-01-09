@@ -1,24 +1,24 @@
 # go-postgres
 
->.[!TIP].
->comando para ejecutar como dev:
+> .[!TIP].
+> Comando para ejecutar como dev:
 bash ```
 air 
 
->.[!NOTE].
->importar gorilla gorm:
+> .[!NOTE].
+> Importar gorilla gorm:
 "github.com/gorilla/mux"
 
->.[!NOTE].
->importar carpetas: 
+> .[!NOTE].
+> Importar carpetas: 
 "github.com/LucioSchiavoni/go-postgres/routes"
 
->.[!NOTE].
->para usar variables de entorno: 
+> .[!NOTE].
+> Para usar variables de entorno: 
 "github.com/joho/godotenv"
 
->.[!IMPORTANT].
->Endpoints: 
+> .[!IMPORTANT].
+> Endpoints: 
  
 GET :
 "/users"  - todos los usuarios
