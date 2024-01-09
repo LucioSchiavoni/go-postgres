@@ -1,23 +1,23 @@
 # go-postgres
 
->.[!TIP].
+> [!TIP]
 >comando para ejecutar como dev:
 bash ```
 air 
 
->.[!NOTE].
+> [!NOTE]
 >importar gorilla gorm:
 "github.com/gorilla/mux"
 
->.[!NOTE].
+> [!NOTE]
 >importar carpetas: 
 "github.com/LucioSchiavoni/go-postgres/routes"
 
->.[!NOTE].
+> [!NOTE]
 >para usar variables de entorno: 
 "github.com/joho/godotenv"
 
->.[!IMPORTANT].
+> [!IMPORTANT]
 >Endpoints: 
  
 GET :
