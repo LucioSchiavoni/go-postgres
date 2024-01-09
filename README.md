@@ -1,25 +1,34 @@
 # go-postgres
 
-
-comando para ejecutar como dev:
+>.[!TIP]
+>comando para ejecutar como dev:
+bash ```
 air 
 
-importar gorilla gorm:
+>.[!NOTE]
+>importar gorilla gorm:
 "github.com/gorilla/mux"
 
-importar carpetas: 
+>.[!NOTE]
+>importar carpetas: 
 "github.com/LucioSchiavoni/go-postgres/routes"
 
-para usar variables de entorno:
+>.[!NOTE]
+>para usar variables de entorno: 
 "github.com/joho/godotenv"
 
-
-endpoints: 
-
+>.[!IMPORTANT]
+>Endpoints: 
+ 
 GET :
 "/users"  - todos los usuarios
 
 "/user/{id}"  - usuario por id
+
+"/login" - logear usuario con su email y password (devuelve el token)
+
+"/auth" - autorizacion que requiere el token para autenticar usuario (devuelve los datos del usuario)
+
 
 POST:
 "/user" - crear usuario 
