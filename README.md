@@ -2,7 +2,6 @@
 
 > [!TIP]
 >comando para ejecutar como dev:
-bash ```
 air 
 
 > [!NOTE]
@@ -19,7 +18,7 @@ air
 
 > [!IMPORTANT]
 >Endpoints: 
- 
+
 GET :
 "/users"  - todos los usuarios
 
