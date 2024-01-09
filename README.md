@@ -2,7 +2,6 @@
 
 > .[!TIP].
 > Comando para ejecutar como dev:
-bash ```
 air 
 
 > .[!NOTE].
