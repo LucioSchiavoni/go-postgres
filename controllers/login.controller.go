@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/LucioSchiavoni/go-postgres/controllers"
 	"github.com/LucioSchiavoni/go-postgres/db"
 	"github.com/LucioSchiavoni/go-postgres/middlewares"
 	"github.com/LucioSchiavoni/go-postgres/models"
@@ -37,13 +36,13 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if !controllers.CheckPasswordHash(loginCredentials.Password, user.Password) {
+	if CheckPasswordHash(loginCredentials.Password, user.Password) {
 		w.WriteHeader(http.StatusUnauthorized)
 		fmt.Fprint(w, "Invalid credentials")
 		return
 	}
 
-	tokenString, err := middlewares.CreateToken(user.Username)
+	tokenString, err := middlewares.CreateToken(user.Username, user.Email)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprint(w, "Error generando el token")
@@ -51,7 +50,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	fmt.Fprint(w, tokenString)
+	json.NewEncoder(w).Encode(&tokenString)
 }
 
 func ProtectedHandler(w http.ResponseWriter, r *http.Request) {
@@ -64,12 +63,24 @@ func ProtectedHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	tokenString = tokenString[len("Bearer "):]
 
-	err := middlewares.VerifyToken(tokenString)
+	claims, err := middlewares.VerifyToken(tokenString)
 	if err != nil {
 		w.WriteHeader(http.StatusUnauthorized)
 		fmt.Fprint(w, "Invalid token")
 		return
 	}
-	fmt.Fprint(w, "Autenticado!")
+
+	username, ok := claims["username"].(string)
+	email, ok := claims["email"].(string)
+
+	responseData := map[string]string{"username": username, "email": email}
+
+	if !ok {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprint(w, "Error al obtener el username del token")
+		return
+	}
+
+	json.NewEncoder(w).Encode(&responseData)
 
 }

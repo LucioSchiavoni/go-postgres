@@ -1,5 +1,9 @@
 # go-postgres
 
+
+comando para ejecutar como dev:
+air 
+
 importar gorilla gorm:
 "github.com/gorilla/mux"
 
