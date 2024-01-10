@@ -1,4 +1,4 @@
-# go-postgres
+# Backend con go y postgres
 
 > [!TIP]
 >comando para ejecutar como dev:
@@ -15,6 +15,9 @@ air
 > [!NOTE]
 >para usar variables de entorno: 
 "github.com/joho/godotenv"
+
+> [!IMPORTANT]
+>Agregar carpeta temp-images
 
 > [!IMPORTANT]
 >Endpoints: 
