@@ -17,6 +17,9 @@ air
 "github.com/joho/godotenv"
 
 > [!IMPORTANT]
+>Agregar carpeta temp-images
+
+> [!IMPORTANT]
 >Endpoints: 
 
 GET :
