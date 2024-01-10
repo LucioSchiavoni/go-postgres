@@ -7,5 +7,7 @@ type Post struct {
 
 	Title       string `gorm:"not null"`
 	Description string `gorm:"not null"`
+	Price       float64
+	ImagePost   string
 	UserID      uint
 }

@@ -24,10 +24,10 @@ func CheckPasswordHash(password, hash string) bool {
 	return err == nil
 }
 
-func UploadFile(w http.ResponseWriter, r *http.Request) (string, error) {
+func UploadFile(w http.ResponseWriter, r *http.Request, fieldName string) (string, error) {
 	r.ParseMultipartForm(10 << 20)
 
-	file, _, err := r.FormFile("image")
+	file, _, err := r.FormFile(fieldName)
 	if err != nil {
 		w.Write([]byte("Error al subir la imagen"))
 		return "", err
@@ -69,6 +69,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	user.Username = r.FormValue("username")
 	user.Email = r.FormValue("email")
 	user.Password = r.FormValue("password")
+	user.Address = r.FormValue("address")
 
 	secret := os.Getenv("HASH_PWD")
 	password := r.FormValue("password")
@@ -90,7 +91,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 
-	imagePath, err := UploadFile(w, r)
+	imagePath, err := UploadFile(w, r, "image")
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
