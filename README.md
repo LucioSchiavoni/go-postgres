@@ -1,4 +1,4 @@
-# go-postgres
+# Backend con go y postgres
 
 > [!TIP]
 >comando para ejecutar como dev:
