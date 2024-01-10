@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <form id="myForm" enctype="multipart/form-data">
+        <input type="text" name="username" id="username" placeholder="Username">
+        <input type="text" name="email" id="email" placeholder="Email">
+        <input type="password" name="password" placeholder="Password" >
+        <input type="file" name="image" id="image">
+        <button type="button" onclick="submitForm()">Enviar</button>
+    </form>
+
+    <script>
+        function submitForm() {
+            var formData = new FormData(document.getElementById("myForm"));
+
+            fetch("http://localhost:3000/user", {
+                method: "POST",
+                body: formData,
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => console.log(data))
+            .catch(error => console.error("Error:", error));
+        }
+    </script>
+</body>
+</html>

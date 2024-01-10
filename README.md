@@ -31,12 +31,7 @@ GET :
 
 POST:
 "/user" - crear usuario 
-raw:
-{
-    "username": "",
-    "email": "",
-    "password":""
-}
+el alta de usuarios se encuentra en formato formdata
 
 DELETE:
 "/user" - eliminar usuario 

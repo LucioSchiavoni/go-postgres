@@ -7,6 +7,7 @@ type User struct {
 
 	Username string `gorm:"not null; unique_index"`
 	Email    string `gorm:"not null; unique_index"`
+	Image    string
 	Password string
 	Posts    []Post
 }

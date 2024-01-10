@@ -2,6 +2,8 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
+	"io"
 
 	"net/http"
 	"os"
@@ -22,29 +24,89 @@ func CheckPasswordHash(password, hash string) bool {
 	return err == nil
 }
 
+func UploadFile(w http.ResponseWriter, r *http.Request) (string, error) {
+	r.ParseMultipartForm(10 << 20)
+
+	file, _, err := r.FormFile("image")
+	if err != nil {
+		w.Write([]byte("Error al subir la imagen"))
+		return "", err
+
+	}
+
+	defer file.Close()
+
+	tempFile, err := os.CreateTemp("temp-images", "upload-*.png")
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]string{"error": "Error al crear el archivo temporal"})
+		return "", err
+	}
+
+	defer tempFile.Close()
+
+	_, err = io.Copy(tempFile, file)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	return tempFile.Name(), nil
+
+}
+
 func CreateUser(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
 	var user models.User
-	json.NewDecoder(r.Body).Decode(&user)
 
-	secret := os.Getenv("HASH_PWD")
-
-	hash, _ := HashPassword(secret)
-	match := CheckPasswordHash(secret, hash)
-	if !match {
-		w.WriteHeader(http.StatusUnauthorized)
-		w.Write([]byte("Error en el hash de la contraseña"))
+	err := r.ParseMultipartForm(10 << 20)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"error": "Error de formato FormData"})
 		return
 	}
+
+	user.Username = r.FormValue("username")
+	user.Email = r.FormValue("email")
+	user.Password = r.FormValue("password")
+
+	secret := os.Getenv("HASH_PWD")
+	password := r.FormValue("password")
+
+	hash, err := HashPassword(secret + password)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]string{"error": "Error al generar el hash de la contraseña"})
+		return
+	}
+
 	user.Password = string(hash)
 
-	createUser := db.DB.Create(&user)
-	err := createUser.Error
+	file, _, err := r.FormFile("image")
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"error": "Error al obtener la imagen"})
+		return
+	}
+	defer file.Close()
+
+	imagePath, err := UploadFile(w, r)
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(err.Error()))
+		json.NewEncoder(w).Encode(map[string]string{"error": "Error al subir la imagen"})
+		return
+	}
 
+	user.Image = imagePath
+
+	createUser := db.DB.Create(&user)
+	err = createUser.Error
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+		return
 	}
 
 	user.Password = ""
