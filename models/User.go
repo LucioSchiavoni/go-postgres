@@ -11,5 +11,5 @@ type User struct {
 	Address  string
 	Password string `gorm:"not null; unique_index"`
 	Rol      string `gorm:"default:usuario"`
-	Posts    []Post
+	Posts    []Post `gorm:"foreignKey:UserID"`
 }

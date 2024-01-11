@@ -10,4 +10,5 @@ type Post struct {
 	Price       float64
 	ImagePost   string
 	UserID      uint
+	Usuario     User `gorm:"foreignKey:UserID"`
 }
