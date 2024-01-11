@@ -59,5 +59,12 @@ GET:
 "/post/3"  - obtener por su id de posteo
 
 GET:
+/usuario/{user_id}/posts  - buscar todos los posts de ese usuario con su user_id = ?
+
+GET:
 "/description/user_id/description" (cambiar parmetros) - obtener post donde su id de usuario es x y descripcion es x
 
+GET:
+/usuario/id_usuario/title/posts  buscar posts donde el id de usuario es ? y su title es ? 
+ejemplo:
+"/usuario/19/champions/posts"  

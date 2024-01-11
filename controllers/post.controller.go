@@ -109,7 +109,7 @@ func GetPostByDescription(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetPostByIdUser(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "json/applicacion")
+
 	params := mux.Vars(r)
 	userID := params["user_id"]
 	var posts []models.Post
@@ -118,6 +118,18 @@ func GetPostByIdUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	json.NewEncoder(w).Encode(&posts)
+}
+
+func GetPostByTitle(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	userID := params["user_id"]
+	title := params["title"]
+	var posts []models.Post
+	if err := db.DB.Where("user_id = ? AND title = ?", userID, title).Find(&posts).Error; err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
 	json.NewEncoder(w).Encode(&posts)
 }
 

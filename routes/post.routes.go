@@ -13,4 +13,6 @@ func PostRoutes(router *mux.Router) {
 	router.HandleFunc("/description/{user_id}/{description}", controllers.GetPostByDescription).Methods("GET")
 	router.HandleFunc("/usuario/{user_id}/posts", controllers.GetPostByIdUser).Methods("GET")
 	// el usuario con user_id = ? , Find &posts (buscar todos sus posts con su id de usuario)
+	router.HandleFunc("/usuario/{user_id}/{title}/posts", controllers.GetPostByTitle).Methods("GET")
+	// buscar el posteo donde el usuario con su user_id = ? y su title = ?
 }
